@@ -1,25 +1,52 @@
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
 import "./App.css";
 import { FormItem } from "./components/FormItem";
-
-type ProductForm = {
-  name: string;
-  value: number;
-};
+import { ProductFormType, productSchema } from "./types";
 
 function App() {
-  const { register, handleSubmit } = useForm<ProductForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductFormType>({
+    resolver: zodResolver(productSchema),
+  });
 
-  const onSubmit = (values: ProductForm) => console.log(values);
+  const onSubmit: SubmitHandler<ProductFormType> = (values: ProductFormType) =>
+    console.log(values);
 
   return (
     <main>
-      <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
-        <FormItem label="Nome">
-          <input type="text" {...register("name")} />
+      <form
+        className="flex flex-col gap-5 w-[300px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <FormItem label="Nome" error={errors.title}>
+          <input type="text" {...register("title")} />
         </FormItem>
-        <FormItem label="Valor">
-          <input type="number" {...register("value")} />
+        <FormItem label="Valor" error={errors.value}>
+          <input
+            type="number"
+            defaultValue="0"
+            {...register("value", { valueAsNumber: true })}
+          />
+        </FormItem>
+        <FormItem label="Marca" error={errors.brand}>
+          <select {...register("brand")}>
+            <option value="apple">Apple</option>
+            <option value="samsung">Samsung</option>
+            <option value="xiaomi">Xiaomi</option>
+          </select>
+        </FormItem>
+        <FormItem label="Avaliação" error={errors.rating}>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            step="0.5"
+            {...register("rating", { valueAsNumber: true })}
+          />
         </FormItem>
         <button type="submit">Enviar</button>
       </form>
