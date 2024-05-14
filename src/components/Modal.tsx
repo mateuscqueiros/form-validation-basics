@@ -1,12 +1,12 @@
 import { IconX } from "@tabler/icons-react";
-import { Form } from "./Form";
 
 export type ModalProps = {
+  title: string;
   open: boolean;
   setOpen: (value: boolean) => void;
-};
+} & React.PropsWithChildren;
 
-export function Modal({ open, setOpen }: ModalProps) {
+export function Modal({ title, open, setOpen, children }: ModalProps) {
   return (
     <div
       id="modal"
@@ -25,9 +25,9 @@ export function Modal({ open, setOpen }: ModalProps) {
               className="absolute top-0 right-0 cursor-pointer"
               onClick={() => setOpen(false)}
             />
-            <h2 className="text-2xl font-bold mb-4">Título</h2>
+            <h2 className="text-2xl font-bold mb-4">{title}</h2>
           </div>
-          <Form />
+          {children}
         </div>
       </div>
     </div>

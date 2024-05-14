@@ -1,9 +1,13 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProductFormType, productSchema } from "../types";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormItem } from "./FormItem";
 
-export function Form() {
+export type FormProps = {
+  onSubmit?: SubmitHandler<ProductFormType>;
+};
+
+export function ProductForm({ onSubmit }: FormProps) {
   const {
     register,
     handleSubmit,
@@ -12,12 +16,10 @@ export function Form() {
     resolver: zodResolver(productSchema),
   });
 
-  const onSubmit: SubmitHandler<ProductFormType> = (values: ProductFormType) =>
-    console.log(values);
   return (
     <form
       className="flex flex-col gap-5 w-[300px]"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit && handleSubmit(onSubmit)}
     >
       <FormItem label="Nome" error={errors.title}>
         <input type="text" {...register("title")} />

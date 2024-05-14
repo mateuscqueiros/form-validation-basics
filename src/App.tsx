@@ -1,13 +1,15 @@
 import { useState } from "react";
 import "./App.css";
+import { ProductForm } from "./components/Form";
 import { Modal } from "./components/Modal";
-import { set } from "react-hook-form";
 
 function App() {
   const [open, setOpen] = useState(false);
   return (
-    <main>
-      <Modal open={open} setOpen={setOpen} />
+    <main className="flex w-full h-full justify-center items-center">
+      <Modal title="Criar produto" open={open} setOpen={setOpen}>
+        <ProductForm onSubmit={(values) => console.log(values)} />
+      </Modal>
       <button onClick={() => setOpen(true)}>Open modal</button>
     </main>
   );
